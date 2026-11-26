@@ -1,20 +1,16 @@
-# 8051 Assembly Projects
+# 8051 Assembly Portfolio
 
-A collection of embedded systems projects developed in 8051 assembly language. The implementations cover arithmetic, digital input/output, keypad and LCD interfaces, timers, interrupts, serial communication and application control logic.
+Embedded systems projects developed in 8051 assembly language, covering numerical methods, application logic, timing, control and peripheral interfacing.
 
-## Project catalogue
+## Project repositories
 
-| Subject | Applications |
+| Repository | Technical focus |
 | --- | --- |
-| [Calculations and Number Systems](calculations-and-number-systems/README.md) | Arithmetic, base conversion, bit manipulation and numerical sequences |
-| [Interactive Menus and Learning](interactive-menus/README.md) | Menu-driven applications, input validation and scoring |
-| [Booking and Pricing](booking-and-pricing/README.md) | Tariff calculations, inventory and payment logic |
-| [Timing and Control](timing-and-control/README.md) | Timers, counters, date calculations and output sequencing |
-| [Keypads, Displays and Serial Communication](keypads-and-displays/README.md) | Peripheral interfacing, character displays and UART communication |
-| [Support Files and Incomplete Exercises](support-and-incomplete-exercises/README.md) | Startup routines, peripheral utilities and development exercises |
+| [8051 Arithmetic and Numerical Methods](https://github.com/shawier93/8051_Arithmetic_and_Numerical_Methods) | Arithmetic, number conversion, bit manipulation and sequences |
+| [8051 Interactive Applications](https://github.com/shawier93/8051_Interactive_Applications) | Menus, input validation and scoring |
+| [8051 Booking and Pricing Systems](https://github.com/shawier93/8051_Booking_and_Pricing_Systems) | Pricing, payments and inventory |
+| [8051 Timing and Control](https://github.com/shawier93/8051_Timing_and_Control) | Timers, counters and control sequences |
+| [8051 Peripheral Interfacing](https://github.com/shawier93/8051_Peripheral_Interfacing) | Keypads, LCDs and UART interfaces |
+| [8051 Development Utilities](https://github.com/shawier93/8051_Development_Utilities) | Startup routines, utilities and development exercises |
 
-## Implementation notes
-
-The projects include memory-based calculations, LCD output, keypad input, port polling and interrupt-driven control. Individual project pages describe the implementation, expected results, control flow and any known limitations.
-
-Assembly listings are available alongside the documentation. Example results are calculated from the code; hardware and simulator verification is not established for every implementation.
+Each repository contains application folders, assembly listings and implementation documentation.
