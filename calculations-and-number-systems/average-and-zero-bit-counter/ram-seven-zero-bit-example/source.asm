@@ -1,0 +1,54 @@
+ORG 00H
+
+X0:
+MOV R3,#2
+
+CJNE R3,#1,X2
+
+X1:
+MOV R0,#39
+MOV A,R0
+
+SUBB A,#1
+ADD A,R0
+MOV B,#2
+DIV AB
+MOV R6,A
+SJMP $
+
+X2:
+CJNE R3,#2,X3
+MOV R0,#40H
+MOV R1,#8 
+MOV 20H,#0
+MOV A,R0
+
+X:
+RRC A
+JNC ZEROS
+DJNZ R1,X
+SJMP $
+
+ZEROS:
+INC 20H
+DJNZ R1,X
+SJMP $
+
+X3:
+CJNE A,#3, X0
+SJMP $
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+

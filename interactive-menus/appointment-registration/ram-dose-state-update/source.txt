@@ -1,0 +1,116 @@
+; Personal details removed.
+; Personal details removed.
+ORG 00H
+; yes = 1 , no=0
+; op1 = pos , op2 = neg
+;memory value  that help us in project 
+
+MOV 10H,#0 ;  user chosse 0 or 1 , ( 0= no have corona ,1=have corna)
+
+MOV 11H,#4 ;user chosse what month he have corona 
+
+MOV 12H,#1 ; user  chosse 0 or 1 if he take first doza he put 1 else chosse 0 (dont take first doza )
+ 
+MOV 13H,#11 ; date of firs doza if it take
+
+;RANDOM INITIAL VALUES then the valu chginge in code 
+MOV 14H,#1 ; month  of second  DOZE
+MOV 15H,#100  ; DAY OF second DOZE
+MOV 16H,#1  ; user put 1 or 0 to confar the date
+
+
+START: ; mian code
+loop:
+MOV A,10H ; a= mem(10h)= 0 or 1
+CJNE A,#0,op1 ; if a=0 go next line else go op1 
+ACALL op2 ; go to op2 becuse a=mem(10)=0
+SJMP loop ; go to label loop  
+
+op1:
+POSITIVE: ; he have corona 
+CJNE A,#1,ERROR ; a=mem(10)= 1 go next line if a=1 
+ACALL POS ; go to label pos and do the operation 
+SJMP loop
+
+ERROR:
+SJMP loop
+
+op2:
+NEG:
+;Did You take first doze?
+MOV A,12H ; a=mem(12)= 0 or 1 user chosse  
+CJNE A,#0,SecondDozee ; a=mem(12)= 0 or 1 user choosen  
+MOV 14H,#0 ; TOMORROW 
+SJMP BACK3
+
+SecondDozee:
+; DATA OF FIRST DOZE
+
+CJNE A,#1,ERROR3 ; a=mem(12)=1
+MOV R7,13H ;r7=,mem(13)
+MOV A,R7 ;a=mem(13)
+ADD A,#2
+ACALL CHEACK ; check the month 
+MOV 14H,A ;MONTH OF second DOZE
+MOV 15H,#4 ; DAY OF second DOZE
+
+SJMP BACK3 ; confirm the date 
+
+ERROR3:
+SJMP BACK3
+
+BACK3:
+ACALL CONFIRM
+RET
+;*************
+POS:
+; What month you have corna 
+MOV R7,11H ; number from 1 to 12 
+;Did You take first doze?
+MOV A,12H ; a=mem(12)= 0 or 1 (if 1 it take) 
+CJNE A,#0,SecondDoze ; a = 0 or 1 from mom(12)
+;appointment of 1st doze
+MOV A,R7 ; a=mem(11) what month you have corna
+ADD A,#3
+ACALL CHEACK ; confirm the data 
+MOV 14H,A ; MONTH OF DOZE
+MOV 15H,#1 ; DAY OF DOZE
+
+SJMP BACK1
+
+SecondDoze: ; user take first doza 
+CJNE A,#1,ERROR1 ;if user put a=,mem(12)=1 go next line
+;APPOINTMENT OF 2ND DOZE AFTER 4 MONTH
+MOV A,R7 ;a=mem(12) first doza  
+ADD A,#4
+ACALL CHEACK ; to check month in range 1 to 12
+MOV 14H,A ;MONTH OF second DOZE
+MOV 15H,#2 ; DAY OF second  DOZE 
+SJMP BACK1 ; confirm if the month and date is correct
+
+ERROR1:
+
+BACK1:
+ACALL CONFIRM
+
+RET
+
+;**********
+CHEACK:; to know the month 
+CJNE A,#12,CONTINUE ;a=mem(12)+4
+SJMP BACK2
+CONTINUE:
+JC BACK2  ; IF CARRY FLAG =1, go label back2
+SUBB A,#12
+
+BACK2: ; that men we have month in range 1 to 12
+RET
+
+;**********
+CONFIRM: ;  
+MOV A,16H ; a=mem(16)= user chosse 0 or 1
+CJNE A,#1,CONFIRM
+
+RET
+
+

@@ -1,0 +1,361 @@
+ORG 00H 
+ACALL INLCD
+
+MOV 70H,#1; SELETCTION 
+MOV R1,#23H
+MOV 20H,#4 ; FIRST NUMBER
+MOV 21H,#2 ;SECOND NUMBER
+MOV 22H,#3 ;3RD NUMBER
+MOV 30H,#6 ; NTH NUMBER
+ACALL WELCOME
+
+START:
+
+ACALL SELECTT
+MOV A,70H
+CJNE A,#1,OPTION2
+ACALL OPTIONN1
+ACALL ENTER3NUMBER
+MOV A,#6; NUMBER OF ELEMENTS
+ACALL PERRINSEQ
+ACALL PRINT1
+SJMP START
+
+OPTION2:
+CJNE A,#2,OPTION3
+ACALL OPTIONN2
+ACALL ENTER3NUMBER
+ACALL NthNumber
+ACALL PRINT2
+SJMP START
+
+OPTION3:
+CJNE A,#2,WRONG
+SJMP EXIT
+
+WRONG:
+ACALL WRONGG
+SJMP START
+
+EXIT:
+SJMP $
+
+
+PERRINSEQ:
+MOV R7,A
+MOV R0,#22H
+ST:
+INC R0
+MOV A,R0
+DEC R0
+DEC R0
+MOV A,@R0
+DEC R0 
+ADD A,@R0
+MOV R3,A
+MOV A,R0
+ADD A,#3
+MOV R0,A
+MOV A,R3
+MOV @R0,A
+DJNZ R7,ST
+RET
+
+NthNumber:
+MOV A,30H
+SUBB A,#3
+ACALL PERRINSEQ
+MOV 31H,R3
+RET
+;----------------
+;---------------
+welcome:
+mov a, #80H 
+acall cmd
+mov dptr, #NAME1
+acall wstr
+
+mov a,#0c0h
+acall cmd
+mov dptr, #NAME2
+acall wstr
+acall delay
+ret
+
+mmenu:
+mov a, #80H ;  
+acall cmd
+mov dptr, #OP1
+acall wstr
+
+mov a,#0c0h
+acall cmd
+mov dptr, #OP2
+acall wstr
+acall delay
+ret
+
+SELECTT:
+ACALL CLEAR
+ACALL DELAY
+mov a, #80H ;  
+acall cmd
+mov dptr, #MSG
+acall wstr
+MOV A,70H
+ADD A,#30H
+ACALL WCHR
+
+RET
+
+OPTIONN1:
+mov a,#0c0h
+acall cmd
+mov dptr, #MSG1
+acall wstr
+acall delay
+ret
+
+OPTIONN2:
+mov a,#0c0h
+acall cmd
+mov dptr, #MSG2
+acall wstr
+acall delay
+ret
+
+WRONGG:
+mov a,#0C0h
+acall cmd
+mov dptr, #WRONGGG
+acall wstr
+acall delay
+ret
+
+ENTER3NUMBER:
+ACALL CLEAR
+ACALL DELAY
+mov a, #80H ;  
+acall cmd
+mov dptr, #ENTER
+acall wstr
+MOV A,20H
+ADD A,#30H
+ACALL WCHR
+MOV A,#'-'
+ACALL WCHR
+MOV A,21H
+ADD A,#30H
+ACALL WCHR
+ADD A,#'-'
+ACALL WCHR
+MOV A,22H
+ADD A,#30H
+ACALL WCHR
+ADD A,#'-'
+ACALL WCHR
+ACALL DELAY
+RET
+
+N_NUMBER:
+mov a, #0CH ;  
+acall cmd
+mov dptr, #ENTERNTH
+acall wstr
+MOV A,30H
+ADD A,#30H
+ACALL WCHR
+RET
+
+PRINT1:
+ACALL CLEAR 
+ACALL DELAY
+mov a, #80H ; 
+acall cmd
+
+MOV R4,#4
+MOV R1,#20h
+HH:
+MOV A,@R1
+MOV B,#10
+DIV AB
+ADD A,#30H
+ACALL WCHR
+MOV A,B
+ADD A,#30H
+ACALL WCHR
+MOV A,#'-'
+ACALL WCHR
+INC R1
+DJNZ R4,HH
+
+mov a, #0C0H ; 
+acall cmd
+MOV R4,#4
+HHH:
+MOV A,@R1
+MOV B,#10
+DIV AB
+ADD A,#30H
+ACALL WCHR
+MOV A,B
+ADD A,#30H
+ACALL WCHR
+MOV A,#'-'
+ACALL WCHR
+INC R1
+DJNZ R4,HHH
+RET
+
+PRINT2:
+ACALL CLEAR 
+ACALL DELAY
+mov a, #80H ;  
+acall cmd
+mov dptr, #ENTERNTH
+acall wstr
+MOV A,31H
+ADD A,#30H
+ACALL WCHR
+RET
+
+
+;---------------
+;---------------
+DELAY:
+MOV R1,#100
+he2: MOV R0,#10
+he:DJNZ R0,he
+djnz r1,he2
+RET
+;;;;;;
+
+WCHR:
+PUSH ACC
+PUSH B
+ SETB P1.3
+ MOV B,A
+ ACALL COMMON
+ACALL LDELAY
+ MOV A,B
+ SWAP A
+ACALL COMMON
+ACALL LDELAY
+POP B
+POP ACC
+ RET
+
+CMD:
+ CLR P1.3
+ MOV B,A
+ ACALL COMMON
+ACALL LDELAY
+ MOV A,B
+ SWAP A
+ ACALL COMMON
+ ACALL LDELAY
+ RET
+
+COMMON:
+ ANL a,#11110000B
+ ANL P1, #00001111B
+ ORL P1,A
+ SETB P1.2
+ CLR P1.2
+ RET
+
+INLCD:
+CLR P1.3
+CLR P1.7
+CLR P1.6
+SETB P1.5
+CLR P1.4
+SETB P1.2
+CLR P1.2
+ACALL LDELAY
+SETB P1.2
+CLR P1.2
+SETB P1.7
+CLR P1.6
+CLR P1.5
+CLR P1.4
+SETB P1.2
+CLR P1.2
+ACALL LDELAY
+CLR P1.7
+CLR P1.6
+CLR P1.5
+CLR P1.4
+SETB P1.2
+CLR P1.2
+SETB P1.7
+SETB P1.6
+SETB P1.5
+SETB P1.4
+SETB P1.2
+CLR P1.2
+ACALL LDELAY
+CLR P1.7
+CLR P1.6
+CLR P1.5
+CLR P1.4
+SETB P1.2
+CLR P1.2
+SETB P1.6
+SETB P1.5
+SETB P1.2
+CLR P1.2
+ACALL LDELAY
+RET
+
+LDELAY:
+MOV R0, #50
+DJNZ R0, $
+RET
+
+clear:
+MOV A,#01H
+ACALL CMD
+MOV R7,#14
+WAIT: ACALL LDELAY
+DJNZ R7,WAIT
+ret 
+
+WSTR: 
+        PUSH    ACC             
+CONT1:   
+       CLR     A               
+       MOVC    A,@A+DPTR   ; move character to A 
+       JZ Exit1  
+PRINT:
+        ACALL    WCHR     ; call procedure to write a CHAR 
+        INC DPTR          ; get next character        
+       AJMP    CONT1      ; go to CONT1  
+EXIT1: POP     ACC        ; restore A 
+        RET
+
+
+NAME1: db "8051 DEMO"
+db 0
+NAME2: db "ASSEMBLY"
+db 0
+
+OP1: db "1.PERRIN 2.Nth num"
+db 0
+OP2: db "3.QUIT"
+db 0
+MSG: db "SELECT UR CAT: "
+db 0
+MSG1: db "you chose PERRIN"
+db 0
+MSG2: db "you chose Nth num"
+db 0
+WRONGGG: db "WRONG !!"
+db 0
+ENTER: db "ENTER3NUM: "
+db 0
+ENTERNTH: db "Nth num: "
+db 0
+
+
+END

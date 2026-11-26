@@ -1,0 +1,54 @@
+ORG 00H
+MOV 30H,#2 ;Seat Category (1.Gold,2.Silver)
+MOV 40H,#4 ;Number of Tickets (Max 9 Tickets)
+MOV 50H,#0 ;Amount need to be paid
+MOV 31H,#0 ;Available Seats for gold
+MOV 32H,#0 ;Price for Gold
+MOV 41H,#0 ;Available Seats for silver
+MOV 42H,#0 ;Price for silver
+MOV DPTR,#GOLD
+CLR A
+MOVC A,@A+DPTR
+MOV 31H,A
+INC DPTR
+CLR A
+MOVC A,@A+DPTR
+MOV 32H,A
+MOV DPTR,#SILVER
+CLR A
+MOVC A,@A+DPTR
+MOV 41H,A
+INC DPTR
+CLR A
+MOVC A,@A+DPTR
+MOV 42H,A
+NEXTBOOKING:
+MOV A,30H
+CJNE A,#1,NEXT1
+MOV A,31H
+CLR C
+SUBB A,40H ; Check for available seats
+JC NOAVAIL
+MOV 31H,A
+MOV B,32H
+SJMP CALC
+NEXT1:
+CJNE A,#2,ERROR
+CLR C
+MOV A,41H
+SUBB A,40H ; Check for available seatsJC NOAVAIL
+MOV 41H,A
+MOV B,42H ; price for silver
+SJMP CALC
+ERROR:
+SJMP $
+CALC:
+MOV A,40H ; Number of Seats
+MUL AB ; Multiply by price per seat
+MOV 50H,A
+SJMP NEXTBOOKING
+NOAVAIL:
+SJMP $
+GOLD: DB 9,5
+SILVER: DB 9,3
+end
